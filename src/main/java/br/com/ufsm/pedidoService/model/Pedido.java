@@ -17,6 +17,9 @@ public class Pedido {
     private long idProduct;
     private float valorTotal;
 
+    public Pedido() {
+    }
+
     public Pedido(long id, long idUser, long idProduct, float valorTotal) {
         this.id = id;
         this.idUser = idUser;

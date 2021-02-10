@@ -43,11 +43,11 @@ public class PedidoController {
     @PostMapping("/aaaaa")
     public Pedido criarPedido(/*@RequestBody UsuarioDTO usuario, */@RequestBody ProdutoQuantidadeDTO produtoQuantidade) throws IOException, InterruptedException {
 
-        String uriProduto = "localhost:8081/api/produtos/"+produtoQuantidade.getIdProduto();
+        String uriProduto = "http://localhost:8081/api/produtos/"+produtoQuantidade.getIdProduto()+"/"+ produtoQuantidade.getQuantidade();
         System.out.println(uriProduto);
 
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uriProduto)).build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uriProduto)).header("Content-Type", "application/json").GET().build();
 
         HttpResponse<String> response =
                 client.send(request, HttpResponse.BodyHandlers.ofString());
