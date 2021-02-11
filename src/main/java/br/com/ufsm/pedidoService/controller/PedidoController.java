@@ -1,8 +1,12 @@
 package br.com.ufsm.pedidoService.controller;
 
 import br.com.ufsm.pedidoService.dto.ProdutoQuantidadeDTO;
+import br.com.ufsm.pedidoService.dto.UsuarioDTO;
+import br.com.ufsm.pedidoService.dto.UsuarioProdutoQuantidadeDTO;
 import br.com.ufsm.pedidoService.model.Pedido;
 import br.com.ufsm.pedidoService.repository.PedidoRepository;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,20 +45,32 @@ public class PedidoController {
     }
 
     @PostMapping("/aaaaa")
-    public Pedido criarPedido(/*@RequestBody UsuarioDTO usuario, */@RequestBody ProdutoQuantidadeDTO produtoQuantidade) throws IOException, InterruptedException {
+    public Pedido criarPedido(@RequestBody UsuarioProdutoQuantidadeDTO dadosPedido) throws IOException, InterruptedException, JSONException {
 
-        String uriProduto = "http://localhost:8081/api/produtos/"+produtoQuantidade.getIdProduto()+"/"+ produtoQuantidade.getQuantidade();
-        System.out.println(uriProduto);
+        String uriProduto = "http://localhost:8081/api/produtos/"+dadosPedido.getIdProduto()+"/"+ dadosPedido.getQuantidade();
+        String uriUsuario = "http://localhost:8080/auth";
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uriProduto)).header("Content-Type", "application/json").GET().build();
+        JSONObject data = new JSONObject().put("email", dadosPedido.getEmail()).put("senha", dadosPedido.getSenha());
 
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpClient clientUsuario = HttpClient.newBuilder().build();
+        HttpRequest requestUsuario = HttpRequest.newBuilder()
+                .uri(URI.create(uriUsuario))
+                .POST(HttpRequest.BodyPublishers.ofString(data.toString()))
+                .build();
 
-        System.out.println(response.body());
+        HttpResponse<?> responseUsuario = clientUsuario.send(requestUsuario, HttpResponse.BodyHandlers.discarding());
+        System.out.println(responseUsuario.toString() + responseUsuario.statusCode());
 
 
+        HttpClient clientProduto = HttpClient.newHttpClient();
+        HttpRequest requestProduto = HttpRequest.newBuilder().uri(URI.create(uriProduto)).header("Content-Type", "application/json").GET().build();
+
+        HttpResponse<String> responseProduto =
+                clientProduto.send(requestProduto, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println(responseProduto.body());
+
+        //Esse return é fajuto, botei só pra parar de dar erro enquanto tava codificando aqui em cima
         return repository.save(new Pedido(1L, 1L, 1L, 2000));
     }
 

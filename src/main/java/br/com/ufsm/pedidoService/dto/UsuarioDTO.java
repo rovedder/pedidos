@@ -2,22 +2,17 @@ package br.com.ufsm.pedidoService.dto;
 
 public class UsuarioDTO {
 
-    private Long userId;
     private String email;
-    private String password;
+    private String senha;
 
-    public UsuarioDTO(Long userId, String email, String password) {
-        this.userId = userId;
+    public UsuarioDTO(String email, String senha) {
         this.email = email;
-        this.password = password;
+        this.senha = senha;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public UsuarioDTO(UsuarioDTO usuario) {
+        this.email = usuario.email;
+        this.senha = usuario.getSenha();
     }
 
     public String getEmail() {
@@ -28,11 +23,11 @@ public class UsuarioDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String password) {
+        this.senha = senha;
     }
 }
