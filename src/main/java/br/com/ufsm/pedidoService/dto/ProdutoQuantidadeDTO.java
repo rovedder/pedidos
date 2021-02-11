@@ -1,28 +1,15 @@
 package br.com.ufsm.pedidoService.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class ProdutoQuantidadeDTO {
 
     private Long idProduto;
     private Integer quantidade;
 
-    public ProdutoQuantidadeDTO(Long idProduto, Integer quantidade) {
-        this.idProduto = idProduto;
-        this.quantidade = quantidade;
-    }
-
-    public Long getIdProduto() {
-        return idProduto;
-    }
-
-    public void setIdProduto(Long idProduto) {
-        this.idProduto = idProduto;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
 }
